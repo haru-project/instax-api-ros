@@ -1,0 +1,12 @@
+<launch>
+    <arg name="host"      default="192.168.0.251"/>
+    <arg name="port"      default="8080"/>
+    <arg name="pin"      default="1111"/>
+    <arg name="timeout"      default="10"/>
+    <node name="instax_api_ros" pkg="instax_api_ros" type="instax_print.py" args="--venv $(find instax_api_ros)/venv_instax" output="screen">
+        <param name="host"   type="string" value="$(arg host)" />  
+        <param name="port"   type="int" value="$(arg port)" />  
+        <param name="pin"   type="int" value="$(arg pin)" />  
+        <param name="timeout"   type="int" value="$(arg timeout)" />  
+    </node>      
+</launch>

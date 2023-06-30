@@ -53,3 +53,65 @@ git clone https://github.com/jpwsutton/instax_api.git
 cd instax_api
 python3 setup.py install
 ```
+
+
+# ROS wrapper usage
+
+A ROS wrapper has been created to allow sending for printing through ROS. 
+
+
+## Set-up
+
+Clone the following repository that is used for photo taking and has the service msgs:
+
+```
+git clone --branch develop https://github.com/haru-project/haru_photo_activity
+```
+
+If you wish to test the full photo taking check the README of this repository.
+
+After cloning this repository, create a python virtualenv and install all the python requirements. Note you can also reuse the existing virtual environment in this repository, venv_instax, but it is recommended to always recreate it the first time.
+
+Note that for integration purposes, you need to do this even if you have done the setup.py install setup above. 
+
+
+```bash
+ python3 -m venv venv_instax > /dev/null
+ sudo chown -R $(whoami) venv_instax
+ source venv_instax/bin/activate
+ pip3 install --upgrade pip
+ pip3 install wheel
+ pip3 install -r requirements.txt --no-cache-dir 
+ deactivate
+```
+
+## ROS service printing usage
+
+
+First make sure the computer is connected to the WIFI network of the Instax device, and check that the following arguments are correct, inside the instax_api_ros.launch file. 
+
+```
+    <arg name="host"      default="192.168.0.251"/>
+    <arg name="port"      default="8080"/>
+    <arg name="pin"      default="1111"/>
+    <arg name="timeout"      default="10"/>
+```
+
+To test it:
+
+```
+roslaunch instax_api_ros instax_api_ros.launch
+```
+
+And call the service indicating the directory of the image to be printed:
+
+```
+rosservice call /send_photo "photo_dir: '/home/haru/haru_user_photos/haru_img_insta.png'" 
+```
+
+Inside the Telegram app, the service will be called once the user is happy with the photo. Check the
+interfacing in:
+
+https://github.com/haru-project/idmind-tabletop-telegram-bot/blob/feature/take_picture/src/utils/ros_client.py
+
+
